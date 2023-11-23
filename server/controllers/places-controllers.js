@@ -1,5 +1,4 @@
 const fs = require('fs');
-
 const HttpError = require('../models/http-error');
 const {validationResult} = require('express-validator');
 const Place = require('../models/place');

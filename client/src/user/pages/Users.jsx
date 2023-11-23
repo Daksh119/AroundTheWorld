@@ -17,7 +17,7 @@ const Users = () => {
         );
 
         setLoadedUsers(responseData.users);
-      } catch (err) {}
+      } catch (err) {console.log(err);}
     };
     fetchUsers();
   }, [sendRequest]);

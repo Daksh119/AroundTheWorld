@@ -56,7 +56,7 @@ const UpdatePlace = () => {
           },
           true
         );
-      } catch (err) {}
+      } catch (err) {console.log(err);}
     };
     fetchPlace();
   }, [sendRequest, placeId, setFormData]);
@@ -77,7 +77,7 @@ const UpdatePlace = () => {
         }
       );
       history.push('/' + auth.userId + '/places');
-    } catch (err) {}
+    } catch (err) {console.log(err);}
   };
 
   if (isLoading) {

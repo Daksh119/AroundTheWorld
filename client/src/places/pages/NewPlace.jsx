@@ -59,7 +59,7 @@ const NewPlace = () => {
         }
       );
       history.push('/');
-    } catch (err) {}
+    } catch (err) {console.log(err);}
   };
 
   return (
