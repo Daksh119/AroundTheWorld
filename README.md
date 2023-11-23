@@ -30,12 +30,14 @@ npm install
 ### Run
 
 ```
-# Run client (:3000) & server (:5000)
+# Run server (:5000)
+npm run server
+
+# Run client (http://127.0.0.1:5173/)
 npm run dev
 
-# Run backend only
-npm run server
 ```
+
 
 ## Build & Deploy
 
