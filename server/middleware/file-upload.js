@@ -7,7 +7,7 @@ const MIME_TYPE_MAP = {
   "image/jpg": "jpg",
 };
 
-const fileUpload = multer({
+module.exports = multer({
   limit: 500000,
   storage: multer.diskStorage({
     destination: (req, file, callback) => {
@@ -26,5 +26,3 @@ const fileUpload = multer({
     callback(error, isValid);
   },
 });
-
-module.exports = fileUpload;

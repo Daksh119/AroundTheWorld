@@ -16,7 +16,7 @@ import { useAuth } from './shared/hooks/auth-hook';
 import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
 const Users = React.lazy(() => import('./user/pages/Users'));
-const NewPlace = React.lazy(() => import('./places/pages/UserPlaces'));
+const NewPlace = React.lazy(() => import('./places/pages/NewPlace'));
 const UserPlaces = React.lazy(() => import('./places/pages/UserPlaces'));
 const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace'));
 const Auth = React.lazy(() => import('./user/pages/Auth'));
@@ -29,18 +29,18 @@ const App = () => {
   if (token) {
     routes = (
       <Routes>
-        <Route path='/' element={<Users /> } exact/>
-        <Route path='/:userId/places' element={<UserPlaces />} exact/>
-        <Route path='/places/new' element={<NewPlace />} exact/>
-        <Route path='/places/:placeId' element={<UpdatePlace />}/>
+        <Route exact="true" path='/' element={<Users /> }/>
+        <Route exact="true" path='/:userId/places' element={<UserPlaces />}/>
+        <Route exact="true" path='/places/new' element={<NewPlace />}/>
+        <Route exact="true" path='/places/:placeId' element={<UpdatePlace />}/>
       </Routes>
     );
   } else {
     routes = (
       <Routes>
-        <Route path='/' element={<Users />} exact/>
-        <Route path='/:userId/places' element={<UserPlaces />} exact/>
-        <Route path='/auth' element={<Auth />}/>
+        <Route exact="true" path='/' element={<Users />}/>
+        <Route exact="true" path='/:userId/places' element={<UserPlaces />}/>
+        <Route exact="true" path='/auth' element={<Auth />}/>
       </Routes>
     );
   }

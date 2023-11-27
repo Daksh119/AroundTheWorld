@@ -4,6 +4,7 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
 const getUsers = async (req ,res, next) => {
     let users;
     try {
@@ -22,6 +23,7 @@ const signup = async (req ,res, next) => {
     if(!errors.isEmpty()) {
         return next(new HttpError('Invalid inputs passed, please check your data.', 422));
     }
+    console.log(req.body);
     const {name, email, password} = req.body;
     let existingUser;
     try {
@@ -63,7 +65,7 @@ const signup = async (req ,res, next) => {
 
     try {
         token = jwt.sign({userId: createdUser.id,email: createdUser.email},
-        process.env.JWT_KEY,{expiresIn: "1h"});
+        "jwt",{expiresIn: "1h"});
     } catch (err) {
         return next(new HttpError("Couldn't create user! Please try again later.", 500));
     }

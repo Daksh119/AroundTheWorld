@@ -70,7 +70,7 @@ const Auth = () => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/login`,
+          `http://localhost:5000/api/users/login`,
           'POST',
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -83,20 +83,29 @@ const Auth = () => {
         auth.login(responseData.userId, responseData.token);
       } catch (err) {console.log(err);}
     } else {
+      const formData = new FormData();
+      formData.append('email', formState.inputs.email.value);
+      formData.append('name', formState.inputs.name.value);
+      formData.append('password', formState.inputs.password.value);
+      formData.append('image', formState.inputs.image.value);
       try {
-        const formData = new FormData();
-        formData.append('email', formState.inputs.email.value);
-        formData.append('name', formState.inputs.name.value);
-        formData.append('password', formState.inputs.password.value);
-        formData.append('image', formState.inputs.image.value);
-        const responseData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
-          'POST',
-          formData
-        );
-
+        const response = await fetch('http://localhost:5000/api/users/signup/', {
+          method: 'POST',
+          
+          body:(formData),
+        });
+      
+        if (!response.ok) {
+          // Handle error responses
+          throw new Error('Signup failed');
+        }
+      
+        const responseData = await response.json();
+        // console.log("okk")
         auth.login(responseData.userId, responseData.token);
-      } catch (err) {console.log(err);}
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

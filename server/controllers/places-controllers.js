@@ -50,13 +50,16 @@ const createPlace = async (req, res, next) => {
 
     const {title , description, address} = req.body;
 
+    // console.log("ssss",title , description, address,req.body) 
     let coordinates;
 
-    try {
-        coordinates = await getCoordinatesFromAddress(address);
-    } catch (error) {
-        return next(error);
-    }
+    // do not have google api key
+    
+    // try {
+    //     coordinates = await getCoordinatesFromAddress(address);
+    // } catch (error) {
+    //     return next(error);
+    // }
     
     const createdPlace = new Place({
         title,
@@ -69,7 +72,8 @@ const createPlace = async (req, res, next) => {
 
     let user;
     try {
-       user = await User.findById(req.userData.userId);
+        user = await User.findById(req.userData.userId);
+        
 
     } catch(err) {
         const error = new HttpError('Creating place failed',500);
@@ -80,15 +84,17 @@ const createPlace = async (req, res, next) => {
         const error = new HttpError('Could not find user for provided id',404);
         return next(error);
     }
-
+// commented out here
     try{
         const sess = await mongoose.startSession();
         sess.startTransaction();
         await createdPlace.save({session: sess});
+        // console.log("ok here")
         user.places.push(createdPlace);
         await user.save({session : sess});
         await sess.commitTransaction();
     } catch(err) {
+        console.log(err)
         const error = new HttpError('Creating place failed',500);
         return next(error);
     }
@@ -133,28 +139,29 @@ const updatePlace = async (req,res,next) => {
 
 const deletePlace = async (req,res, next) => {
     const placeId = req.params.pid;
+    console.log("palce id is",placeId)
     let place;
     try {
         place = await Place.findById(placeId).populate('creator');
+        // console.log("palce is ",place)
     } catch(err) {
         const error = new HttpError('Something went wrong, could not delete', 500);
         return next(error);
     }
 
-    if(place.creator.id !== req.userData.userId) {
-        const error = new HttpError('You are not allowed to edit this place', 401);
-        return next(error);
-    }
-
+    
     if(!place){
         const error = new HttpError('Could not find a place', 404);
         return next(error);
     }
-
+    if(place.creator.id !== req.userData.userId) {
+        const error = new HttpError('You are not allowed to edit this place', 401);
+        return next(error);
+    }
     try{
         const sess = await mongoose.startSession();
         sess.startTransaction();
-        await place.remove({session: sess});
+        await Place.deleteOne({ _id: place._id }, { session: sess });
         place.creator.places.pull(place);
         await place.creator.save({session : sess});
         await sess.commitTransaction();
