@@ -46,10 +46,10 @@ VITE_REACT_APP_ASSET_URL=http://localhost:5000
 ### Run
 
 ```
-# Run server (:5000)
+# Run server (localhost:5000)
 npm start
 
-# Run client (http://127.0.0.1:5173/)
+# Run client (localhost:5173)
 npm run dev
 
 ```
