@@ -1,27 +1,36 @@
-import React, { useRef, useEffect } from 'react';
-
+import React from 'react';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 import './Map.css';
 
+// Fix for the default icon not appearing
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
 const Map = props => {
-  const mapRef = useRef();
-  
   const { center, zoom } = props;
 
-  useEffect(() => {
-    const map = new window.google.maps.Map(mapRef.current, {
-      center: center,
-      zoom: zoom
-    });
-  
-    new window.google.maps.Marker({ position: center, map: map });
-  }, [center, zoom]);  
-
   return (
-    <div
-      ref={mapRef}
+    <MapContainer
+      center={center}
+      zoom={zoom}
       className={`map ${props.className}`}
       style={props.style}
-    ></div>
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <Marker position={center} />
+    </MapContainer>
   );
 };
 

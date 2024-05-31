@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const placeRoutes = require('./routes/places-routes');
 const userRoutes = require('./routes/user-routes');
 const HttpError = require('./models/http-error');
-
+require('dotenv').config();
 const app = express();
 
 app.use(bodyParser.json());
@@ -42,9 +42,9 @@ app.use((error,req,res,next) => {
 })
 
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.h9ufhbt.mongodb.net/?retryWrites=true&w=majority`).then(() => {
+mongoose.connect(process.env.MONGODB_URL).then(() => {
     app.listen(process.env.PORT || 5000);
-    console.log('connecd');
+    console.log('Mongodb connected');
 }).catch(err => {
     console.log(err);
 })

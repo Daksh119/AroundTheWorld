@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-
+import Map from '../../shared/components/UIElements/Map';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
@@ -31,7 +31,7 @@ const PlaceItem = props => {
     setShowConfirmModal(false);
     try {
       await sendRequest(
-        `http://localhost:5000/api/places/${props.id}`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/places/${props.id}`,
         'DELETE',
         null,
         {
@@ -53,7 +53,7 @@ const PlaceItem = props => {
         footerClass='place-item__modal-actions'
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}>
         <div className='map-container'>
-          <div></div>
+          <Map center={props.coordinates} zoom={16}/>
         </div>
       </Modal>
       <Modal
@@ -80,7 +80,7 @@ const PlaceItem = props => {
           {isLoading && <LoadingSpinner asOverlay />}
           <div className='place-item__image'>
             <img
-              src={`http://localhost:5000/${props.image}`}
+              src={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/${props.image}`}
               alt={props.title}
             />
           </div>

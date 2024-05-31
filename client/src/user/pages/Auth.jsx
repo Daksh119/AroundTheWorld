@@ -15,11 +15,13 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import './Auth.css';
+import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const navigate = useNavigate();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -70,7 +72,7 @@ const Auth = () => {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          `http://localhost:5000/api/users/login`,
+          `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/users/login`,
           'POST',
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -81,6 +83,7 @@ const Auth = () => {
           }
         );
         auth.login(responseData.userId, responseData.token);
+        navigate('/');
       } catch (err) {console.log(err);}
     } else {
       const formData = new FormData();
@@ -89,7 +92,7 @@ const Auth = () => {
       formData.append('password', formState.inputs.password.value);
       formData.append('image', formState.inputs.image.value);
       try {
-        const response = await fetch('http://localhost:5000/api/users/signup/', {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/users/signup/`, {
           method: 'POST',
           
           body:(formData),
@@ -103,6 +106,7 @@ const Auth = () => {
         const responseData = await response.json();
         // console.log("okk")
         auth.login(responseData.userId, responseData.token);
+        navigate('/');
       } catch (err) {
         console.log(err);
       }

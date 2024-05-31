@@ -35,7 +35,7 @@ const getPlacesByUser = async (req,res,next) => {
     }
 
     if(!places || places.length === 0){
-        return next(new HttpError('could not find a place for uid', 404));
+        return next(new HttpError('No places of this Id exist', 404));
     }
 
     res.json({places: places.map(place => place.toObject({getters: true}))});
@@ -53,13 +53,12 @@ const createPlace = async (req, res, next) => {
     // console.log("ssss",title , description, address,req.body) 
     let coordinates;
 
-    // do not have google api key
+    try {
+        coordinates = await getCoordinatesFromAddress(address);
+    } catch (error) {
+        return next(error);
+    }
     
-    // try {
-    //     coordinates = await getCoordinatesFromAddress(address);
-    // } catch (error) {
-    //     return next(error);
-    // }
     
     const createdPlace = new Place({
         title,
@@ -70,11 +69,11 @@ const createPlace = async (req, res, next) => {
         creator: req.userData.userId
     })
 
+
     let user;
     try {
         user = await User.findById(req.userData.userId);
         
-
     } catch(err) {
         const error = new HttpError('Creating place failed',500);
         return next(error);
@@ -139,11 +138,9 @@ const updatePlace = async (req,res,next) => {
 
 const deletePlace = async (req,res, next) => {
     const placeId = req.params.pid;
-    console.log("palce id is",placeId)
     let place;
     try {
         place = await Place.findById(placeId).populate('creator');
-        // console.log("palce is ",place)
     } catch(err) {
         const error = new HttpError('Something went wrong, could not delete', 500);
         return next(error);

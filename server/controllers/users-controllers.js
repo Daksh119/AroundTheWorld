@@ -23,7 +23,6 @@ const signup = async (req ,res, next) => {
     if(!errors.isEmpty()) {
         return next(new HttpError('Invalid inputs passed, please check your data.', 422));
     }
-    console.log(req.body);
     const {name, email, password} = req.body;
     let existingUser;
     try {
@@ -65,7 +64,7 @@ const signup = async (req ,res, next) => {
 
     try {
         token = jwt.sign({userId: createdUser.id,email: createdUser.email},
-        "jwt",{expiresIn: "1h"});
+        process.env.JWT_KEY,{expiresIn: "1h"});
     } catch (err) {
         return next(new HttpError("Couldn't create user! Please try again later.", 500));
     }
@@ -93,6 +92,7 @@ const login = async (req ,res, next) => {
 
     try {
         passwordsMatch = await bcrypt.compare(password, existingUser.password);
+        //console.log("password match");
     } catch (err) {
         return next(new HttpError("Couldn't log in! Please check your credentials.", 500));
     }
