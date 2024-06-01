@@ -2,11 +2,11 @@
 
 ## Features
 
-- Users can share places with image and locatin with other users
+- Users can share places they recommend and their locations with other users
 - User profile (Authentication & Autherization)
-- Multiple data models, image upload etc.
+- Multiple data models, image upload using multer etc.
 - Places management
-- Google maps API
+- Leaflet maps
 - Database management (places & users)
 
 ## Usage
