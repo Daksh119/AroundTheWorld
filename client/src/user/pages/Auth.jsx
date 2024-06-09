@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Card from '../../shared/components/UIElements/Card';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -15,7 +15,6 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import './Auth.css';
-import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -42,8 +41,7 @@ const Auth = () => {
       setFormData(
         {
           ...formState.inputs,
-          name: undefined,
-          image: undefined
+          name: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -53,10 +51,6 @@ const Auth = () => {
           ...formState.inputs,
           name: {
             value: '',
-            isValid: false
-          },
-          image: {
-            value: null,
             isValid: false
           }
         },
@@ -84,27 +78,23 @@ const Auth = () => {
         );
         auth.login(responseData.userId, responseData.token);
         navigate('/');
-      } catch (err) {console.log(err);}
+      } catch (err) {
+        console.log(err);
+      }
     } else {
-      const formData = new FormData();
-      formData.append('email', formState.inputs.email.value);
-      formData.append('name', formState.inputs.name.value);
-      formData.append('password', formState.inputs.password.value);
-      formData.append('image', formState.inputs.image.value);
       try {
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/users/signup/`, {
-          method: 'POST',
-          
-          body:(formData),
-        });
-      
-        if (!response.ok) {
-          // Handle error responses
-          throw new Error('Signup failed');
-        }
-      
-        const responseData = await response.json();
-        // console.log("okk")
+        const responseData = await sendRequest(
+          `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/users/signup`,
+          'POST',
+          JSON.stringify({
+            email: formState.inputs.email.value,
+            name: formState.inputs.name.value,
+            password: formState.inputs.password.value
+          }),
+          {
+            'Content-Type': 'application/json'
+          }
+        );
         auth.login(responseData.userId, responseData.token);
         navigate('/');
       } catch (err) {
@@ -130,14 +120,6 @@ const Auth = () => {
               validators={[VALIDATOR_REQUIRE()]}
               errorText='Please enter a name.'
               onInput={inputHandler}
-            />
-          )}
-          {!isLoginMode && (
-            <ImageUpload
-              center
-              id='image'
-              onInput={inputHandler}
-              errorText='Please provide an image.'
             />
           )}
           <Input

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Avatar from '../../shared/components/UIElements/Avatar';
 import Card from '../../shared/components/UIElements/Card';
+import img from '../../shared/util/user@3x.png';
 import './UserItem.css';
 
 const UserItem = props => {
@@ -12,7 +13,7 @@ const UserItem = props => {
         <Link to={`/${props.id}/places`}>
           <div className='user-item__image'>
             <Avatar
-              image={`${import.meta.env.VITE_REACT_APP_ASSET_URL}/${props.image}`}
+              image={img}
               alt={props.name}
             />
           </div>

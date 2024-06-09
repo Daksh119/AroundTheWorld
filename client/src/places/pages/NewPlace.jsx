@@ -32,10 +32,6 @@ const NewPlace = () => {
       address: {
         value: '',
         isValid: false
-      },
-      image: {
-        value: null,
-        isValid: false
       }
     },
     false
@@ -46,16 +42,16 @@ const NewPlace = () => {
   const placeSubmitHandler = async event => {
     event.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append('title', formState.inputs.title.value);
-      formData.append('description', formState.inputs.description.value);
-      formData.append('address', formState.inputs.address.value);
-      formData.append('image', formState.inputs.image.value);
       await sendRequest(
         `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/places`,
         'POST',
-        formData,
+        JSON.stringify({
+          title: formState.inputs.title.value,
+          description: formState.inputs.description.value,
+          address: formState.inputs.address.value
+        }),
         {
+          'Content-Type': 'application/json',
           authorization:  auth.token
         }
       );
@@ -93,11 +89,7 @@ const NewPlace = () => {
           errorText='Please enter a valid address.'
           onInput={inputHandler}
         />
-        <ImageUpload
-          id='image'
-          onInput={inputHandler}
-          errorText='Please provide an image.'
-        />
+        
         <Button type='submit' disabled={!formState.isValid}>
           ADD PLACE
         </Button>

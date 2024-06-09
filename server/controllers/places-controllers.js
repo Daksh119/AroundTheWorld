@@ -5,6 +5,7 @@ const Place = require('../models/place');
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const getCoordinatesFromAddress = require("../util/location");
+const getImage = require("../util/image.js");
 
 
 const getPlaceById = async (req,res,next) => {
@@ -58,6 +59,13 @@ const createPlace = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
+
+    let img;
+    try {
+        img = await getImage(title);
+    } catch (error) {
+        return next(error);
+    }
     
     
     const createdPlace = new Place({
@@ -65,7 +73,7 @@ const createPlace = async (req, res, next) => {
         description,
         address,
         location:coordinates,
-        image: req.file.path,
+        image: img,
         creator: req.userData.userId
     })
 

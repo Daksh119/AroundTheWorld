@@ -16,7 +16,7 @@ router.get('/user/:uid', placesControllers.getPlacesByUser);
 router.use(isAuth); //auth middleware
 
 //protected routes 
-router.post('/',fileUpload.single('image'), [check('title').not().isEmpty(),
+router.post('/', [check('title').not().isEmpty(),
 check('description').isLength({min: 5}),
 check('address').not().isEmpty()], placesControllers.createPlace);
 
