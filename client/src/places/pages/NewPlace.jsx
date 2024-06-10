@@ -52,7 +52,7 @@ const NewPlace = () => {
         }),
         {
           'Content-Type': 'application/json',
-          'Authorization':  auth.token
+          authorization:  auth.token
         }
       );
       history('/');
