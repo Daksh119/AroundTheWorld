@@ -20,7 +20,7 @@ const getImage = async(query) =>  {
     });
 
     if (response.response.results.length > 0) {
-      return response.response.results[0].urls.regular;
+      return response.response.results[0].urls.small;
     } else {
       throw new HttpError('No images found');
     }
