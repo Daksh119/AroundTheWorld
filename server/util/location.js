@@ -6,11 +6,12 @@ const getCoordinatesFromAddress = async (address) => {
   const response = await axios.get(
     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`
   );
+  console.log(response.data);
   const data = response.data;
   if (!data || data.length === 0) {
     throw new HttpError(
       "Couldn't find coordinates for the specified address!",
-      422
+      404
     );
   }
   console.log("in1");
