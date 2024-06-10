@@ -59,7 +59,6 @@ const createPlace = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
-    console.log("c1");
     let img;
     try {
         img = await getImage(title);
@@ -67,7 +66,6 @@ const createPlace = async (req, res, next) => {
         return next(error);
     }
     
-    console.log("c2");
     const createdPlace = new Place({
         title,
         description,
@@ -76,7 +74,6 @@ const createPlace = async (req, res, next) => {
         image: img,
         creator: req.userData.userId
     })
-    console.log("c3");
 
     let user;
     try {
@@ -86,7 +83,6 @@ const createPlace = async (req, res, next) => {
         const error = new HttpError('Creating place failed',500);
         return next(error);
     }
-    console.log("c4");
     if(!user) {
         const error = new HttpError('Could not find user for provided id',404);
         return next(error);
@@ -105,7 +101,6 @@ const createPlace = async (req, res, next) => {
         const error = new HttpError('Creating place failed',500);
         return next(error);
     }
-    console.log("c5");
     res.status(201).json({place: createdPlace});
 }
 
