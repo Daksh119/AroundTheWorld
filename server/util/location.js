@@ -1,13 +1,18 @@
-const axios = require("axios");
+let fetch;
+(async () => {
+  fetch = (await import('node-fetch')).default;
+  global.fetch = fetch;
+})();
 const HttpError = require("../models/http-error");
 
 const getCoordinatesFromAddress = async (address) => {
   console.log("in");
-  const response = await axios.get(
+  const response = await fetch(
     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`
   );
-  console.log(response.data);
-  const data = response.data;
+  
+  const data = await response.json();
+  console.log(data);
   if (!data || data.length === 0) {
     throw new HttpError(
       "Couldn't find coordinates for the specified address!",
