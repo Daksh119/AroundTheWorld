@@ -50,7 +50,7 @@ const createPlace = async (req, res, next) => {
     }
     console.log("create");
     const {title , description, address} = req.body;
-
+    console.log('c1');
     // console.log("ssss",title , description, address,req.body) 
     let coordinates;
 
@@ -59,7 +59,7 @@ const createPlace = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
-    console.log("c1");
+    console.log("c2");
     let img;
     try {
         img = await getImage(title);
