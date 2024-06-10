@@ -59,6 +59,7 @@ const createPlace = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
+    console.log("c1");
     let img;
     try {
         img = await getImage(title);
